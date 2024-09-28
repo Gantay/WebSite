@@ -1,11 +1,10 @@
 package main
 
 import (
-	"html/template"
-	"io"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"html/template"
+	"io"
 )
 
 type Templates struct {
@@ -35,6 +34,10 @@ func main() {
 	e.Renderer = newTemplate()
 
 	e.GET("/", func(c echo.Context) error {
+		return c.Render(200, "index", count)
+	})
+
+	e.POST("/count", func(c echo.Context) error {
 		count.Count++
 		return c.Render(200, "index", count)
 	})
