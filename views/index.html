@@ -2,17 +2,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title></title>
+    <title>Plaet</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keyword" content="lol,lmao"> 
+    <meta name="description" content="main page">  
     <link href="css/style.css" rel="stylesheet" />
-    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+    <!-- <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script> -->
+
+    <title>Website Under Construction</title>
   </head>
   <body>
-    {{ template "count" .}}
+
+    <div class="nav">
+
+    </body>
   </body>
+
+  
 </html>
 
-{{ end }} {{block "count" .}} Count {{ .Count }}
-<button hx-target="body" hx-post="/count">Count</button>
-{{ end }}
+{{block "form" .}}
+<form>
+  name : <input type="text" name="name">
+</form>
+{{end}}
