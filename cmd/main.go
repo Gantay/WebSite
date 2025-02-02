@@ -1,32 +1,64 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
+	"strings"
 
 	"net/http"
 )
 
+var temps *template.Template
+
 func main() {
-	//css
-	css := http.FileServer(http.Dir("static"))
-	http.Handle("/static/", http.StripPrefix("/static/", css))
-	//html
-	tmpl, err := template.ParseGlob("views/*.html")
+
+	mux := http.NewServeMux()
+
+	var err error
+
+	//HTML  -load templates once at startup
+	temps, err = template.ParseGlob("views/*.html")
 	if err != nil {
-		log.Fatalln("ParseFiles faile")
+		log.Fatalf("Glob Parseing failed: %v", err)
 	}
 
-	h1 := func(w http.ResponseWriter, _ *http.Request) {
-		tmpl.Execute(w, nil)
-	}
+	//CSS
+	fs := http.FileServer(http.Dir("static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	http.HandleFunc("/hello", h1)
+	images := http.FileServer(http.Dir("images"))
+	mux.Handle("/images/", http.StripPrefix("/images/", images))
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	mux.HandleFunc("/", DynamicEntry)
+
+	fmt.Println("server listing on port 8080.")
+
+	log.Fatal(http.ListenAndServe(":8080", mux))
+
 }
 
-// func helloHandleFunc(w http.ResponseWriter, r *http.Request) {
-// 	tmp.Execute(w, nil)
-// 	// fmt.Fprint(w, "Hello world")
-// }
+func DynamicEntry(w http.ResponseWriter, r *http.Request) {
+
+	path := strings.TrimPrefix(r.URL.Path, "/")
+	if path == "" {
+		path = "index"
+	}
+
+	templateFile := path + ".html"
+
+	// Check if template exists
+	if temps.Lookup(templateFile) == nil {
+		temps.ExecuteTemplate(w, "404.html", nil)
+		log.Printf("404 not found: %s", templateFile)
+		return
+	}
+
+	// Render the requested template
+	err := temps.ExecuteTemplate(w, templateFile, nil)
+	if err != nil {
+		http.Error(w, "Template execution failed", http.StatusInternalServerError)
+		log.Printf("Template execution failed: %v", err)
+	}
+
+}
