@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"path/filepath"
 	"strings"
 
 	"net/http"
@@ -24,11 +25,13 @@ func main() {
 	}
 
 	//CSS
-	fs := http.FileServer(http.Dir("static"))
-	mux.Handle("/static/", http.StripPrefix("/static/", fs))
+	// fs := http.FileServer(http.Dir("static"))
+	// mux.Handle("/static/", http.StripPrefix("/static/", fs))
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	images := http.FileServer(http.Dir("images"))
-	mux.Handle("/images/", http.StripPrefix("/images/", images))
+	// images := http.FileServer(http.Dir("images"))
+	// mux.Handle("/images/", http.StripPrefix("/images/", images))
+	mux.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 
 	mux.HandleFunc("/", DynamicEntry)
 
@@ -46,6 +49,12 @@ func DynamicEntry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templateFile := path + ".html"
+
+	// ✅ Ignore requests with file extensions (like .css, .js, .ico)
+	if filepath.Ext(path) != "" {
+		http.NotFound(w, r)
+		return
+	}
 
 	// Check if template exists
 	if temps.Lookup(templateFile) == nil {
