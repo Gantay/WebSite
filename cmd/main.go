@@ -24,14 +24,8 @@ func main() {
 		log.Fatalf("Glob Parseing failed: %v", err)
 	}
 
-	//CSS
-	// fs := http.FileServer(http.Dir("static"))
-	// mux.Handle("/static/", http.StripPrefix("/static/", fs))
+	//static
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-
-	// images := http.FileServer(http.Dir("images"))
-	// mux.Handle("/images/", http.StripPrefix("/images/", images))
-	mux.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 
 	mux.HandleFunc("/", DynamicEntry)
 
