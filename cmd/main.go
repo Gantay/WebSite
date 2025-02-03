@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"html/template"
 	"log"
 	"path/filepath"
@@ -18,7 +18,6 @@ func main() {
 
 	var err error
 
-	//HTML  -load templates once at startup
 	temps, err = template.ParseGlob("views/*.html")
 	if err != nil {
 		log.Fatalf("Glob Parseing failed: %v", err)
@@ -29,9 +28,12 @@ func main() {
 
 	mux.HandleFunc("/", DynamicEntry)
 
-	fmt.Println("server listing on port 8080.")
-
+	log.Println("Server live at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", mux))
+
+	//HTTPS with self-signed
+	// log.Println("Server running at https://localhost:8443")
+	// log.Fatal(http.ListenAndServeTLS(":8443", "cert/cert.pem", "cert/key.pem", mux))
 
 }
 
@@ -44,7 +46,7 @@ func DynamicEntry(w http.ResponseWriter, r *http.Request) {
 
 	templateFile := path + ".html"
 
-	// ✅ Ignore requests with file extensions (like .css, .js, .ico)
+	//Ignore requests with file extensions (like .css, .js, .ico)
 	if filepath.Ext(path) != "" {
 		http.NotFound(w, r)
 		return
