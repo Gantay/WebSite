@@ -2,13 +2,15 @@ package main
 
 import (
 	//"fmt"
-	"golang.org/x/text/cases"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // PageData holds data to be passed to templates
@@ -53,9 +55,6 @@ func main() {
 	}
 	log.Fatal(server.ListenAndServe())
 
-	//HTTPS with self-signed
-	// log.Println("Server running at https://localhost:8443")
-	// log.Fatal(http.ListenAndServeTLS(":8443", "cert/cert.pem", "cert/key.pem", mux))
 }
 
 func DynamicEntry(w http.ResponseWriter, r *http.Request) {
@@ -75,24 +74,31 @@ func DynamicEntry(w http.ResponseWriter, r *http.Request) {
 
 	// Prepare page data
 	data := PageData{
-		Title:       strings.Title(strings.Replace(path, "-", " ", -1)),
+		Title:       cases.Title(language.English).String(strings.Replace(path, "-", " ", -1)),
 		CurrentYear: time.Now().Year(),
 		Path:        r.URL.Path,
 	}
 
-	// Check if template exists
+	// Check template existence and render
 	if templ.Lookup(templateFile) == nil {
-		templ.ExecuteTemplate(w, "404.html", nil)
+		w.WriteHeader(http.StatusNotFound)
+		if err := templ.ExecuteTemplate(w, "404.html", data); err != nil {
+			log.Printf("Error rendering 404 page: %v", err)
+			http.Error(w, "Not Found", http.StatusNotFound)
+		}
 		log.Printf("404 not found: %s", templateFile)
 		return
 	}
 
-	// Render the requested template
-	err := templ.ExecuteTemplate(w, templateFile, nil)
-	if err != nil {
-		http.Error(w, "Template execution failed", http.StatusInternalServerError)
-		log.Printf("Template execution failed: %v", err)
+	// Set content type
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	// Render template
+	if err := templ.ExecuteTemplate(w, templateFile, data); err != nil {
+		log.Printf("Template execution failed for %s: %v", templateFile, err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
+
 }
 
 // Middleware for request logging
