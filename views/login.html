@@ -3,78 +3,24 @@
 
 
 <head>
-    <title>posts</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- SEO Metadata -->
-    <meta name="keywords" content="The place to be, Based" />
-    <meta name="description" content="My personal blog, your go-to for nothing" />
-
-    <!-- Social Sharing Metadata -->
-    <meta property="og:title" content="Construction" />
-    <meta property="og:description" content="My personal blog, your go-to for nothing" />
-    <meta property="og:image" content="/images/og-image.png" />
-    <meta property="og:url" content="https://sandpalette.com" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <!-- Icons and Favicons -->
-    <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-
-    <!-- Stylesheets -->
-    <link href="/static/style.css" rel="stylesheet" />
-
-    <!-- JavaScript Libraries -->
-    <!-- <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script> -->
-
-
-
+    {{ template "Head" }}
 </head>
 
 <body>
     <div class="nav">
         <a href="index">Home</a>
         <a href="posts">Posts</a>
-        <a href="about">about</a>
-        <!-- <a href="login">about</a> -->
+        <a class="active" href="about">About Me</a>
+        <b href="login">Login</b>
+
 
     </div>
 
-    <h1>about me i'm cool.</h1>
+
+
 </body>
 
 
+{{ template "Foot" }}
+
 </html>
-
-// head from index
-
-<head>
-    <title>Website Under Construction</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- SEO Metadata -->
-    <meta name="keywords" content="lol, lmao" />
-    <meta name="description" content="Main page for blog, your go-to for nothing" />
-
-    <!-- Social Sharing Metadata -->
-    <meta property="og:title" content="Construction" />
-    <meta property="og:description" content="Main page for blog, your go-to for nothing" />
-    <meta property="og:image" content="/static/images/og-image.png" />
-    <meta property="og:url" content="https://sandpalette.com" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <!-- Icons and Favicons -->
-    <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png" />
-
-    <!-- Stylesheets -->
-    <link href="/static/css/style.css" rel="stylesheet" />
-
-    <!-- JavaScript Libraries -->
-    <!-- <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script> -->
-
-
-
-</head>
