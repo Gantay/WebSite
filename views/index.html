@@ -1,36 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+{{template "layout" .}}
 
-<head>
-  {{ template "Head" .}}
-</head>
+{{define "content"}}
 
-<body>
-  <div class="nav">
-    <a class="active" href="index">Home</a>
-    <a href="posts">Posts</a>
-    <a href="about">About Me</a>
-    <b href="login">Login</b>
+<p>Welcome to the homepage!</p>
 
+<img src="/static/images/favicon.png">
 
-  </div>
-
-
-  <h1>Under Construction.</h1>
-
-  <!-- Website Under Construction -->
-
-  <img src="/static/images/favicon.png">
-
-</body>
-
-
-{{ template "Foot" }}
-
-</html>
-
-<!-- {{block "form" .}}
-<form>
-  name : <input type="text" name="name">
-</form>
-{{end}} -->
+{{ "hello world" | upper }}
+{{ "hello world" | title }}
+{{end}}

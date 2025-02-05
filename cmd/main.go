@@ -19,6 +19,7 @@ type PageData struct {
 	Content     string
 	Tag         string
 	CurrentYear int
+	CurrentTime string
 	Path        string
 }
 
@@ -32,7 +33,7 @@ func main() {
 	var err error
 	funcMap := template.FuncMap{
 		"upper": strings.ToUpper,
-		"title": cases.Title,
+		"title": cases.Title(language.AmericanEnglish).String,
 	}
 
 	templ, err = template.New("").Funcs(funcMap).ParseGlob("views/*.html")
@@ -76,6 +77,7 @@ func DynamicEntry(w http.ResponseWriter, r *http.Request) {
 	data := PageData{
 		Title:       cases.Title(language.English).String(strings.Replace(path, "-", " ", -1)),
 		CurrentYear: time.Now().Year(),
+		CurrentTime: time.Now().UTC().Format("14:00 UTC"),
 		Path:        r.URL.Path,
 	}
 

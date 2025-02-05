@@ -1,26 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{{template "layout" .}}
 
-<head>
-    {{ template "Head" }}
-</head>
+{{define "content"}}
 
+<p>POSTS.!</p>
 
-<body>
-    <div class="nav">
-        <a href="index">Home</a>
-        <a class="active" href="posts">Posts</a>
-        <a href="about">About Me</a>
-        <b href="login">Login</b>
-
-
-    </div>
-
-    <h1>Say NO to the BoogeyMan</h1>
-
-
-</body>
-
-{{ template "Foot" }}
-
-</html>
+{{ "hello world" | upper }}
+{{ "hello world" | title }}
+{{end}}
